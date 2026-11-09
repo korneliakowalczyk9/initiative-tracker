@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Initiative decision flow | Discovery prototype</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="prototype.js" defer></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="wordmark" href="#main" aria-label="Initiative Tracker prototype home">
+            <span class="wordmark-mark" aria-hidden="true">I</span>
+            <span>Initiative Tracker</span>
+        </a>
+        <div class="topbar-meta">
+            <span class="study-label">Decision to implementation</span>
+            <span class="scope-label">Prototype · not MVP</span>
+        </div>
+    </header>
+
+    <main id="main">
+        <section id="queue-screen" aria-labelledby="queue-title">
+            <header class="queue-heading">
+                <div>
+                    <h1 id="queue-title" tabindex="-1">Initiatives</h1>
+                    <p>Coordination · Intake, assignment and decision follow-up</p>
+                </div>
+                <button class="register-button" type="button" disabled aria-describedby="registration-note">Register
+                    initiative</button>
+            </header>
+            <p class="wireframe-caption">EXPLORATION WIREFRAME · FICTIONAL EXAMPLE DATA · MVP SCOPE NOT APPROVED</p>
+
+            <div class="queue-summary" aria-label="Initiative queue summary">
+                <div class="queue-stat">
+                    <span>New · needs assignment</span>
+                    <strong id="count-new">0</strong>
+                </div>
+                <div class="queue-stat">
+                    <span>Under review</span>
+                    <strong id="count-review">0</strong>
+                </div>
+                <div class="queue-stat">
+                    <span>Decision overdue</span>
+                    <strong id="count-overdue">0</strong>
+                    <small>Escalation recipients: decision owner + coordination team</small>
+                </div>
+            </div>
+
+            <div class="queue-controls">
+                <label>
+                    <span>Search initiatives</span>
+                    <input id="search-initiatives" type="search" placeholder="Search by initiative name or number">
+                </label>
+                <label>
+                    <span>Division</span>
+                    <select id="division-filter">
+                        <option value="">All divisions</option>
+                        <option value="Division A">Division A</option>
+                        <option value="Division B">Division B</option>
+                        <option value="Division C">Division C</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Workflow stage</span>
+                    <select id="stage-filter">
+                        <option value="">All stages</option>
+                        <option value="New">New</option>
+                        <option value="Under review">Under review</option>
+                        <option value="In progress">In progress</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="table-scroll">
+                <table class="initiative-table">
+                    <caption class="visually-hidden">Fictional initiatives in the coordination queue</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Initiative</th>
+                            <th scope="col">Division</th>
+                            <th scope="col">Decision owner</th>
+                            <th scope="col">Stage</th>
+                            <th scope="col">Decision window</th>
+                            <th scope="col">Health · freshness</th>
+                        </tr>
+                    </thead>
+                    <tbody id="initiative-rows"></tbody>
+                </table>
+            </div>
+            <p id="empty-state" class="empty-state" hidden>No initiatives match these search and filter choices.</p>
+            <p id="queue-feedback" class="queue-feedback" role="status" aria-live="polite"></p>
+            <p id="registration-note" class="prototype-note">Registration and automated escalation are not interactive
+                in this discovery prototype.</p>
+            <p class="freshness-note">Health stays at its last reported value when freshness is Overdue. The
+                decision-window start and overdue-clearing rule remain open.</p>
+        </section>
+
+        <section id="decision-screen" aria-label="Initiative decision" hidden>
+            <header class="page-heading">
+                <button class="back-button" id="back-to-queue" type="button">Back to initiatives</button>
+                <div>
+                    <p class="eyebrow">Decision owner · review</p>
+                    <h1>Review initiative fit</h1>
+                    <p class="intro-copy">Customer onboarding improvement · <span id="workflow-path">New</span></p>
+                </div>
+                <span class="scope-label">Exploratory wireframe</span>
+            </header>
+
+            <section class="initiative-summary" aria-labelledby="initiative-title">
+                <div class="record-heading">
+                    <div>
+                        <p class="eyebrow">Fictional initiative · <span id="initiative-number">DEMO-001</span></p>
+                        <h2 id="initiative-title">Customer onboarding improvement</h2>
+                    </div>
+                    <span class="type-label" id="initiative-type">Process improvement</span>
+                </div>
+
+                <dl class="summary-grid">
+                    <div class="summary-item">
+                        <dt>Division</dt>
+                        <dd id="initiative-division">Division A</dd>
+                    </div>
+                    <div class="summary-item">
+                        <dt>Assigned by</dt>
+                        <dd id="initiative-owner">Coordination team · Decision owner A</dd>
+                    </div>
+                    <div class="summary-item">
+                        <dt>Decision window</dt>
+                        <dd id="initiative-window">Needs decision owner assignment</dd>
+                        <p class="summary-note">Review-period start and calendar are not modeled.</p>
+                    </div>
+                </dl>
+
+                <div class="status-area" id="status-panel" aria-live="polite" aria-atomic="true" tabindex="-1">
+                    <div class="status-line">
+                        <span class="field-label">Current workflow status</span>
+                        <span class="status-badge" id="status-badge" data-status="New">New</span>
+                    </div>
+                    <p class="status-description" id="status-description">Created and not yet submitted for review.</p>
+                </div>
+            </section>
+
+            <section class="decision-panel" aria-labelledby="decision-title">
+                <header class="section-heading">
+                    <p class="eyebrow">Scope fit</p>
+                    <h2 id="decision-title">Review decision</h2>
+                    <p>Does this initiative fit the defined scope? Record the confirmed decision below.</p>
+                </header>
+
+                <div class="action-group" id="actions-new">
+                    <p class="action-prompt">Coordination team: send this initiative for review?</p>
+                    <button class="primary-action" id="send-for-review" type="button">Send for business review</button>
+                </div>
+
+                <div class="action-group" id="actions-review" hidden>
+                    <p class="action-prompt">Decision owner or designated contact: record the confirmed decision.
+                        If it arrived by email, the coordination team may record it here.</p>
+                    <fieldset class="decision-options">
+                        <legend>Choose a decision</legend>
+                        <label class="decision-option">
+                            <input type="radio" name="decision" value="In progress">
+                            <span class="decision-copy">
+                                <strong>Accept for in-scope implementation</strong>
+                                <span>Next workflow status: <strong>In progress</strong>. Acceptance does not by itself
+                                    mean
+                                    implementation has started.</span>
+                            </span>
+                        </label>
+                        <label class="decision-option">
+                            <input type="radio" name="decision" value="Withdrawn">
+                            <span class="decision-copy">
+                                <strong>Do not implement locally</strong>
+                                <span>Next status: <strong>Withdrawn</strong>. The broader portfolio record remains
+                                    unchanged.</span>
+                            </span>
+                        </label>
+                    </fieldset>
+                    <p class="selection-feedback" id="decision-feedback" aria-live="polite">Select an outcome to enable
+                        confirmation.</p>
+                    <button class="primary-action" id="confirm-decision" type="button" disabled>Confirm
+                        decision</button>
+                </div>
+
+                <div class="action-group terminal-message" id="actions-terminal" role="status" aria-live="polite"
+                    hidden>
+                    <p id="terminal-message"></p>
+                    <button class="text-action" id="return-to-queue" type="button">Return to initiatives</button>
+                </div>
+
+                <div class="reset-row">
+                    <button class="text-action" id="reset-demo" type="button">Reset demo</button>
+                    <span>Nothing is saved. Refreshing also resets this demo.</span>
+                </div>
+            </section>
+
+            <section class="clarification-row" aria-label="Prototype boundaries">
+                <div>
+                    <p class="note-label">Decision and health are separate</p>
+                    <p>Recording a decision does not change health. Further-assessment mapping remains unresolved and is
+                        not
+                        an interactive option here.</p>
+                </div>
+                <p class="page-footnote">Timers, escalation behavior and permission enforcement are not modeled. This
+                    discovery prototype is not an MVP and does not select a production technology stack.</p>
+            </section>
+        </section>
+    </main>
+</body>
+
+</html>

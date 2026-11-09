@@ -1,0 +1,35 @@
+# Dependencies and builds
+node_modules/
+dist/
+build/
+coverage/
+
+# Environment files and local settings
+.env
+.env.*
+!.env.example
+
+# Credentials and secret material
+credentials/
+credentials.*
+secrets/
+secrets.*
+*.secret
+*.secrets
+*.token
+
+# Private keys and certificate bundles
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_ed25519
+id_ecdsa
+
+# Logs and operating system files
+*.log
+.DS_Store
+Thumbs.db
