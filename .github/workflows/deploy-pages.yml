@@ -1,0 +1,48 @@
+# Deploys the static prototype in UI/prototype/ to GitHub Pages.
+# The contents of UI/prototype/ become the site root, so index.html, styles.css
+# and prototype.js keep the same relative paths they have in the repository.
+name: Deploy prototype to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "UI/prototype/**"
+      - ".github/workflows/deploy-pages.yml"
+  workflow_dispatch:
+
+# Minimum permissions for the official Pages deployment actions.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. Let a running deployment finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload the prototype folder
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: UI/prototype
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
